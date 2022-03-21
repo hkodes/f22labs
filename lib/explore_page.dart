@@ -77,7 +77,14 @@ class ImageCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         Future.delayed(Duration.zero, () async {
-          _showDetails(imageData.url, context);
+          Navigator.pushReplacement(
+            context,
+            CupertinoPageRoute(
+              builder: (context) => DetailsPage(
+                imageUrl: imageData.url,
+              ),
+            ),
+          );
         });
       },
       child: ClipRRect(
@@ -88,33 +95,33 @@ class ImageCard extends StatelessWidget {
   }
 }
 
-_showDetails(dynamic imageUrl, BuildContext context) {
-  showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return GestureDetector(
-          onVerticalDragDown: (details) {
-            Navigator.pop(context);
-          },
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-            child: StatefulDragArea(
-              child: Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white),
-                child: Center(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: Image.network(imageUrl, fit: BoxFit.cover),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        );
-      });
-}
+// _showDetails(dynamic imageUrl, BuildContext context) {
+//   showDialog(
+//       barrierDismissible: false,
+//       context: context,
+//       builder: (BuildContext context) {
+//         return GestureDetector(
+//           onVerticalDragDown: (details) {
+//             Navigator.pop(context);
+//           },
+//           child: BackdropFilter(
+//             filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+//             child: StatefulDragArea(
+//               child: Container(
+//                 height: MediaQuery.of(context).size.height,
+//                 width: MediaQuery.of(context).size.width,
+//                 decoration: BoxDecoration(
+//                     borderRadius: BorderRadius.circular(20),
+//                     color: Colors.white),
+//                 child: Center(
+//                   child: ClipRRect(
+//                     borderRadius: BorderRadius.circular(10.0),
+//                     child: Image.network(imageUrl, fit: BoxFit.cover),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ),
+//         );
+//       });
+// }
