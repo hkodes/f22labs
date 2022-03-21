@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'dart:ui';
+import 'package:f22labs/details_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'model/image_model.dart';
 import 'package:http/http.dart' as http;
@@ -67,14 +70,51 @@ class _ExplorePageState extends State<ExplorePage> {
 
 class ImageCard extends StatelessWidget {
   const ImageCard({required this.imageData});
-
   final ImageModel imageData;
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10.0),
-      child: Image.network(imageData.url, fit: BoxFit.cover),
+    return InkWell(
+      onTap: () {
+        Future.delayed(Duration.zero, () async {
+          _showDetails(imageData.url, context);
+        });
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10.0),
+        child: Image.network(imageData.url, fit: BoxFit.cover),
+      ),
     );
   }
+}
+
+_showDetails(dynamic imageUrl, BuildContext context) {
+  showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return GestureDetector(
+          onVerticalDragDown: (details) {
+            Navigator.pop(context);
+          },
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+            child: StatefulDragArea(
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white),
+                child: Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image.network(imageUrl, fit: BoxFit.cover),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      });
 }
